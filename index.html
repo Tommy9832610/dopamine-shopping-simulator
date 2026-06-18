@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dopamine Luxury Market</title>
+    <title>Dopamine Nex-Gen Luxury Market</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,61 +11,73 @@
 
     <header class="hud-header">
         <div class="stat-box">
-            <span class="label">BILANCIO DISPONIBILE</span>
+            <span class="label">PORTAFOGLIO VIRTUALE</span>
             <h1 id="budget-counter">$100,000,000,000</h1>
         </div>
         <div class="stat-box">
-            <span class="label">OGGETTI POSSEDUTI</span>
+            <span class="label">STATUS RANK</span>
+            <h2 id="user-rank" class="rank-bronze">Miliardario Base 🥉</h2>
+        </div>
+        <div class="stat-box">
+            <span class="label">OGGETTI NEL CAVEAU</span>
             <h2 id="items-owned">0</h2>
         </div>
     </header>
 
     <div class="ticker-wrap">
         <div class="ticker" id="fomo-ticker">
-            🔥 Qualcuno ha appena acquistato una "Flotta di Yacht" | ⚠️ I prezzi del petrolio finto sono in aumento!
+            ⚡ MERCATO APERTO: I super-ricchi stanno investendo in Megayacht | Tasso di lusso stabile.
         </div>
     </div>
 
     <main class="shop-container">
         
-        <div class="product-card" data-id="1" data-price="15" data-name="Caffè Dorato">
-            <div class="badge">TRENDING</div>
-            <div class="product-emoji">☕</div>
-            <h3>Caffè in Foglia d'Oro</h3>
-            <p class="price">$15</p>
-            <button class="buy-btn">ACQUISTA ORA</button>
-        </div>
-
-        <div class="product-card" data-id="2" data-price="350000" data-name="Cybercar">
+        <div class="product-card" data-id="1" data-price="250000" data-name="Supercar Elettrica">
             <div class="badge rare">RARO</div>
-            <div class="product-emoji">🏎️</div>
-            <h3>Cybercar Hyperion</h3>
-            <p class="price">$350,000</p>
-            <button class="buy-btn">ACQUISTA ORA</button>
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=500&q=80" alt="Supercar">
+            </div>
+            <h3>Hypercar Elettrica Cyber</h3>
+            <p class="price">$250,000</p>
+            <button class="buy-btn">ACQUISTA BENE</button>
         </div>
 
-        <div class="product-card" data-id="3" data-price="250000000" data-name="Isola">
-            <div class="badge legendary">LEGGENDARIO</div>
-            <div class="product-emoji">🏝️</div>
-            <h3>Isola Privata Criptata</h3>
-            <p class="price">$250,000,000</p>
-            <button class="buy-btn">ACQUISTA ORA</button>
+        <div class="product-card" data-id="2" data-price="45000000" data-name="Jet Privato">
+            <div class="badge epic">EPICO</div>
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=500&q=80" alt="Jet">
+            </div>
+            <h3>Jet Privato Invisibile</h3>
+            <p class="price">$45,000,000</p>
+            <button class="buy-btn">ACQUISTA BENE</button>
         </div>
 
-        <div class="product-card" data-id="4" data-price="5000000000" data-name="Squadra Calcio">
+        <div class="product-card" data-id="3" data-price="350000000" data-name="Mega Yacht">
             <div class="badge legendary">LEGGENDARIO</div>
-            <div class="product-emoji">⚽</div>
-            <h3>Club di Calcio in Premier</h3>
-            <p class="price">$5,000,000,000</p>
-            <button class="buy-btn">ACQUISTA ORA</button>
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=500&q=80" alt="Yacht">
+            </div>
+            <h3>Mega Yacht Impero</h3>
+            <p class="price">$350,000,000</p>
+            <button class="buy-btn">ACQUISTA BENE</button>
+        </div>
+
+        <div class="product-card" data-id="4" data-price="1200000000" data-name="Grattacielo">
+            <div class="badge legendary">LEGGENDARIO</div>
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=500&q=80" alt="Grattacielo">
+            </div>
+            <h3>Grattacielo a Manhattan</h3>
+            <p class="price">$1,200,000,000</p>
+            <button class="buy-btn">ACQUISTA BENE</button>
         </div>
 
     </main>
 
     <section class="vault-section">
-        <h2>🔒 Il tuo Caveau Privato (Inventario)</h2>
+        <h2>🔒 Caveau di Massima Sicurezza</h2>
         <div id="inventory-list" class="inventory-container">
-            <p class="empty-msg">Il tuo caveau è vuoto. Inizia a spendere.</p>
+            <p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>
         </div>
     </section>
 
