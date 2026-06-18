@@ -6,6 +6,7 @@ let comboTimer;
 const inventory = {};
 const unlockedAchievements = new Set();
 
+// Aggiornata la chiave qui con il nuovo nome
 const productsData = { 
     "Caffè Dorato": 50,
     "Supercar Elettrica": 250000, 
@@ -13,7 +14,7 @@ const productsData = {
     "Mega Yacht": 350000000,
     "Attico Manhattan": 1200000000,
     "Stazione Spaziale": 15000000000,
-    "👑 Torta Suprema dell'Apocalisse Finanziaria": 0,
+    "👑 Pura Dopamina": 0,
     "👑 NFT Donut Dorato": 500000000
 };
 
@@ -65,13 +66,13 @@ function triggerDessertCelebration(spentAll = false) {
     cakeOverlay.style.zIndex = '9999';
     
     let subtext = spentAll 
-        ? "Hai sacrificato TUTTO il tuo immenso patrimonio cliccando sul Tasto Torta! L'economia mondiale è crollata in dolcezza."
-        : "Hai consumato fino all'ultimo centesimo dei 100 Miliardi! Ti sei meritato questa mega torta virtuale!";
+        ? "Hai sacrificato TUTTO il tuo patrimonio per un'overdose di Pura Dopamina! L'economia ringrazia."
+        : "Hai consumato fino all'ultimo centesimo dei 100 Miliardi! Ti sei meritato questa festa virtuale!";
 
     cakeOverlay.innerHTML = `
         <div style="font-size: 8rem; animation: bounce 1s infinite alternate;">🎂</div>
         <h1 style="color: #ff69b4; font-size: 2.5rem; text-align:center; font-weight:900; margin-top:20px;">
-            IL DOLCE SUPREMO DELLA VITTORIA! 🍰
+            OVERDOSE DI DOPAMINA! 🍰
         </h1>
         <p style="color: #4a2840; font-size: 1.2rem; text-align:center; max-width:80%; margin-top:10px; line-height:1.5; font-weight: bold;">
             ${subtext}
@@ -105,8 +106,8 @@ document.getElementById('mega-cake-btn').addEventListener('click', () => {
         totalSpent += budget;
         budget = 0; 
         budgetCounter.innerText = "$0";
-        triggerAchievement('all_in_cake', "Il Grande Sacrificio 🎂", "Hai scambiato 100 miliardi per una singola fetta di torta monumentale.");
-        updateInventoryHTML("👑 Torta Suprema dell'Apocalisse Finanziaria");
+        triggerAchievement('all_in_cake', "Iniezione di Felicità 🎂", "Hai scambiato 100 miliardi per Pura Dopamina.");
+        updateInventoryHTML("👑 Pura Dopamina");
         setTimeout(() => { triggerDessertCelebration(true); }, 300);
     }
 });
@@ -158,7 +159,7 @@ buttons.forEach(button => {
             playCoinSound(true);
 
             if (budget < 100000000 && budget > 0) {
-                triggerAchievement('sweet_victory', "Pasticceria d'Élite 🍰", "Hai consumato tutto il capitale.");
+                triggerAchievement('sweet_victory', "Pasticceria d'Élite 2", "Hai consumato tutto il capitale.");
                 triggerDessertCelebration(false);
             }
 
