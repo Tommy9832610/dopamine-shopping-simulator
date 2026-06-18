@@ -9,6 +9,7 @@
 </head>
 <body>
 
+    <!-- HUD Avanzato -->
     <header class="hud-header">
         <div class="stat-box">
             <span class="label">PORTAFOGLIO VIRTUALE</span>
@@ -19,63 +20,76 @@
             <h2 id="user-rank" class="rank-bronze">Miliardario Base 🥉</h2>
         </div>
         <div class="stat-box">
-            <span class="label">OGGETTI NEL CAVEAU</span>
-            <h2 id="items-owned">0</h2>
+            <span class="label">COMBO SCONTO</span>
+            <h2 id="combo-multiplier" style="color: var(--neon-pink)">1.0x</h2>
         </div>
     </header>
 
+    <!-- Live Ticker -->
     <div class="ticker-wrap">
         <div class="ticker" id="fomo-ticker">
-            ⚡ MERCATO APERTO: I super-ricchi stanno investendo in Megayacht | Tasso di lusso stabile.
+            ⚡ BORSA: Il mercato è estremamente volatile oggi. Compra al ribasso, rivendi al massimo!
         </div>
     </div>
 
+    <!-- Il Mercato Dinamico -->
     <main class="shop-container">
-        
-        <div class="product-card" data-id="1" data-price="250000" data-name="Supercar Elettrica">
+        <div class="product-card" data-base-price="250000" data-name="Supercar Elettrica">
             <div class="badge rare">RARO</div>
             <div class="img-container">
                 <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=500&q=80" alt="Supercar">
             </div>
             <h3>Hypercar Elettrica Cyber</h3>
-            <p class="price">$250,000</p>
-            <button class="buy-btn">ACQUISTA BENE</button>
+            <p class="price">$250,000 <span class="trend">--</span></p>
+            <button class="buy-btn">ACQUISTA</button>
         </div>
 
-        <div class="product-card" data-id="2" data-price="45000000" data-name="Jet Privato">
+        <div class="product-card" data-base-price="45000000" data-name="Jet Privato">
             <div class="badge epic">EPICO</div>
             <div class="img-container">
                 <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=500&q=80" alt="Jet">
             </div>
             <h3>Jet Privato Invisibile</h3>
-            <p class="price">$45,000,000</p>
-            <button class="buy-btn">ACQUISTA BENE</button>
+            <p class="price">$45,000,000 <span class="trend">--</span></p>
+            <button class="buy-btn">ACQUISTA</button>
         </div>
 
-        <div class="product-card" data-id="3" data-price="350000000" data-name="Mega Yacht">
+        <div class="product-card" data-base-price="350000000" data-name="Mega Yacht">
             <div class="badge legendary">LEGGENDARIO</div>
             <div class="img-container">
                 <img src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=500&q=80" alt="Yacht">
             </div>
             <h3>Mega Yacht Impero</h3>
-            <p class="price">$350,000,000</p>
-            <button class="buy-btn">ACQUISTA BENE</button>
+            <p class="price">$350,000,000 <span class="trend">--</span></p>
+            <button class="buy-btn">ACQUISTA</button>
         </div>
-
-        <div class="product-card" data-id="4" data-price="1200000000" data-name="Grattacielo">
-            <div class="badge legendary">LEGGENDARIO</div>
-            <div class="img-container">
-                <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=500&q=80" alt="Grattacielo">
-            </div>
-            <h3>Grattacielo a Manhattan</h3>
-            <p class="price">$1,200,000,000</p>
-            <button class="buy-btn">ACQUISTA BENE</button>
-        </div>
-
     </main>
 
+    <!-- CHICCA 1: Il Casinò Clandestino / Scatola a Sorpresa -->
+    <section class="casino-section">
+        <div class="casino-card">
+            <span class="badge" style="color: var(--neon-gold)">RISCHIO ALTO</span>
+            <h3>🎲 Investimento Anonimo Criptato</h3>
+            <p>Costo: <b style="color: var(--neon-pink)">$500,000,000</b></p>
+            <p class="casino-desc">Puoi sbloccare un NFT leggendario dal valore inestimabile o perdere l'intero capitale investito.</p>
+            <button id="gamble-btn">TENTA LA FORTUNA</button>
+        </div>
+    </section>
+
+    <!-- Notifiche di Obiettivi Sbloccati -->
+    <div id="achievement-toast" class="toast hidden">
+        <div class="toast-content">
+            <span class="toast-icon">🏆</span>
+            <div>
+                <h4 id="ach-title">Obiettivo Sbloccato!</h4>
+                <p id="ach-desc">Descrizione dell'obiettivo.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Caveau -->
     <section class="vault-section">
-        <h2>🔒 Caveau di Massima Sicurezza</h2>
+        <h2>🔒 Caveau di Massima Sicurezza (Clicca su un bene per RIVENDERLO)</h2>
         <div id="inventory-list" class="inventory-container">
             <p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>
         </div>
