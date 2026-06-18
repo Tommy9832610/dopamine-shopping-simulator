@@ -12,7 +12,9 @@ const productsData = {
     "Jet Privato": 45000000, 
     "Mega Yacht": 350000000,
     "Attico Manhattan": 1200000000,
-    "Stazione Spaziale": 15000000000
+    "Stazione Spaziale": 15000000000,
+    "👑 Torta Suprema dell'Apocalisse Finanziaria": 0,
+    "👑 NFT Donut Dorato": 500000000
 };
 
 const budgetCounter = document.getElementById('budget-counter');
@@ -46,7 +48,6 @@ function triggerAchievement(id, title, desc) {
     setTimeout(() => { toast.classList.add('hidden'); }, 4000);
 }
 
-// Schermata celebrativa con torta gigante ed emoji
 function triggerDessertCelebration(spentAll = false) {
     playCoinSound(true);
 
@@ -93,27 +94,27 @@ function triggerDessertCelebration(spentAll = false) {
         budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
         rankLabel.innerText = "Miliardario Base 🥉";
         rankLabel.className = "rank-bronze";
+        
+        for (let member in inventory) delete inventory[member];
+        inventoryContainer.innerHTML = '<p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>';
     });
 }
 
-// Logica del Tasto-Torta Fotografico
 document.getElementById('mega-cake-btn').addEventListener('click', () => {
     if (budget > 0) {
         totalSpent += budget;
         budget = 0; 
         budgetCounter.innerText = "$0";
-        
         triggerAchievement('all_in_cake', "Il Grande Sacrificio 🎂", "Hai scambiato 100 miliardi per una singola fetta di torta monumentale.");
         updateInventoryHTML("👑 Torta Suprema dell'Apocalisse Finanziaria");
-        
         setTimeout(() => { triggerDessertCelebration(true); }, 300);
     }
 });
 
-// Volatilità Mercato
 setInterval(() => {
-    document.querySelectorAll('.product-card:not(.premium-cake-card)').forEach(card => {
+    document.querySelectorAll('.product-card').forEach(card => {
         const name = card.getAttribute('data-name');
+        if(!name) return;
         const basePrice = parseInt(card.getAttribute('data-base-price'));
         const changePercent = (Math.random() * 24 - 12) / 100;
         let currentPrice = Math.round(basePrice * (1 + changePercent));
@@ -145,7 +146,6 @@ function checkRankProgression(spent) {
     else if (spent >= 50000000) { rankLabel.innerText = "Pasticciere d'Élite 🧁"; rankLabel.className = "rank-silver"; }
 }
 
-// Acquisti Standard
 buttons.forEach(button => {
     button.addEventListener('click', (e) => {
         const card = e.target.parentElement;
@@ -157,7 +157,7 @@ buttons.forEach(button => {
             totalSpent += finalPrice;
             playCoinSound(true);
 
-            if (budget < 100000000) {
+            if (budget < 100000000 && budget > 0) {
                 triggerAchievement('sweet_victory', "Pasticceria d'Élite 🍰", "Hai consumato tutto il capitale.");
                 triggerDessertCelebration(false);
             }
@@ -184,31 +184,46 @@ buttons.forEach(button => {
 function updateInventoryHTML(name) {
     if (inventory[name]) {
         inventory[name].count++;
-        document.getElementById(`inv-${name}`).querySelector('.qty').innerText = `x${inventory[name].count}`;
     } else {
         inventory[name] = { count: 1 };
-        if(Object.keys(inventory).length === 1) inventoryContainer.innerHTML = ''; 
-        const itemHtml = `<div class="inv-item" id="inv-${name}" onclick="sellItem('${name}')">${name} <b class="qty" style="color:var(--candy-gold)">x1</b></div>`;
-        inventoryContainer.insertAdjacentHTML('beforeend', itemHtml);
     }
+    renderInventory();
 }
 
-window.sellItem = function(name) {
+function renderInventory() {
+    const keys = Object.keys(inventory);
+    if (keys.length === 0) {
+        inventoryContainer.innerHTML = '<p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>';
+        return;
+    }
+
+    inventoryContainer.innerHTML = '';
+    keys.forEach(name => {
+        if (inventory[name].count <= 0) return;
+        const div = document.createElement('div');
+        div.className = 'inv-item';
+        div.innerHTML = `${name} <b class="qty" style="color:var(--candy-gold)">x${inventory[name].count}</b>`;
+        div.addEventListener('click', () => { sellItem(name); });
+        inventoryContainer.appendChild(div);
+    });
+}
+
+function sellItem(name) {
     if (inventory[name] && inventory[name].count > 0) {
-        budget += productsData[name];
+        const refundValue = productsData[name] || 0;
+        budget += refundValue;
         inventory[name].count--;
         playCoinSound(true);
 
         if (inventory[name].count === 0) {
             delete inventory[name];
-            document.getElementById(`inv-${name}`).remove();
-            if (Object.keys(inventory).length === 0) inventoryContainer.innerHTML = '<p class="empty-msg">Nessun bene di lusso registrato.</p>';
-        } else {
-            document.getElementById(`inv-${name}`).querySelector('.qty').innerText = `x${inventory[name].count}`;
         }
         budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
+        renderInventory();
     }
-};
+}
+
+window.sellItem = sellItem;
 
 document.getElementById('gamble-btn').addEventListener('click', () => {
     const cost = 500000000;
@@ -229,4 +244,3 @@ document.getElementById('gamble-btn').addEventListener('click', () => {
         alert("Fondi insufficienti!");
     }
 });
-
