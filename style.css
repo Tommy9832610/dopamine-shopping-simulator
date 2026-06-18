@@ -1,19 +1,231 @@
-/* Sezione Casino */
+/* ==========================================
+   CONFIGURAZIONE VARIABILI E BASE
+   ========================================== */
+:root {
+    --bg-color: #030408;
+    --card-bg: #0b0d17;
+    --neon-pink: #ff0055;
+    --neon-cyan: #00f3ff;
+    --neon-gold: #ffaa00;
+    --neon-green: #00ff66;
+    --text-muted: #646b85;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: #f1f2f6;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding-top: 150px;
+    padding-bottom: 50px;
+    overflow-x: hidden;
+}
+
+/* ==========================================
+   HUD DI CONTROLLO (SUPERIORE)
+   ========================================== */
+.hud-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(3, 4, 8, 0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+    z-index: 1000;
+}
+
+.stat-box {
+    text-align: center;
+}
+
+.stat-box .label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    font-weight: 700;
+    display: block;
+}
+
+.stat-box h1 {
+    margin: 5px 0 0 0;
+    font-size: 2.2rem;
+    color: var(--neon-green);
+    font-weight: 800;
+    transition: transform 0.1s ease;
+}
+
+.stat-box h2 { 
+    margin: 5px 0 0 0; 
+    font-size: 1.5rem; 
+}
+
+/* Classi Dinamiche per lo Status Rank */
+.rank-bronze { color: #cd7f32; }
+.rank-silver { color: #eee; text-shadow: 0 0 10px #fff; }
+.rank-gold { color: var(--neon-gold); text-shadow: 0 0 10px rgba(255,170,0,0.5); }
+.rank-master { color: var(--neon-pink); text-shadow: 0 0 15px var(--neon-pink); }
+
+/* ==========================================
+   LIVE TICKER (NOTIZIE SCORREVOLI)
+   ========================================== */
+.ticker-wrap { 
+    width: 100%; 
+    background: #000; 
+    overflow: hidden; 
+    padding: 7px 0; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.ticker { 
+    white-space: nowrap; 
+    animation: marquee 25s linear infinite; 
+    color: var(--neon-cyan); 
+    font-size: 0.8rem; 
+    letter-spacing: 1px; 
+}
+
+@keyframes marquee { 
+    0% { transform: translate3d(100%, 0, 0); } 
+    100% { transform: translate3d(-100%, 0, 0); } 
+}
+
+/* ==========================================
+   VETRINA PRODOTTI (MERCATO)
+   ========================================== */
+.shop-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.product-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: 20px;
+    padding: 15px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover {
+    transform: scale(1.02);
+    border-color: rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+}
+
+.img-container {
+    width: 100%;
+    height: 180px;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .img-container img {
+    transform: scale(1.08);
+}
+
+/* Badge di Rarità */
+.badge {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    z-index: 10;
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 5px 10px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.8);
+    letter-spacing: 1px;
+}
+.badge.rare { color: var(--neon-cyan); border: 1px solid var(--neon-cyan); }
+.badge.epic { color: #b026ff; border: 1px solid #b026ff; }
+.badge.legendary { color: var(--neon-pink); border: 1px solid var(--neon-pink); }
+
+.product-card h3 { 
+    font-size: 1.15rem; 
+    margin: 10px 5px; 
+    font-weight: 600; 
+}
+
+/* Prezzi e Trend di fluttuazione */
+.price { 
+    font-size: 1.3rem; 
+    color: var(--neon-gold); 
+    font-weight: 700; 
+    margin: 5px 5px 15px 5px; 
+}
+
+.trend {
+    font-size: 0.85rem;
+    margin-left: 5px;
+    font-weight: bold;
+}
+.trend.up { color: var(--neon-green); }
+.trend.down { color: var(--neon-pink); }
+
+/* Pulsante Acquista */
+.buy-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    padding: 14px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.product-card:hover .buy-btn {
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    color: #fff;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+}
+
+.buy-btn:active { 
+    transform: scale(0.97); 
+}
+
+/* ==========================================
+   CHICCA 1: SEZIONE CASINÒ CLANDESTINO
+   ========================================== */
 .casino-section {
     max-width: 1200px;
     margin: 20px auto;
     padding: 0 20px;
 }
+
 .casino-card {
     background: linear-gradient(135deg, #15002a, #0b0d17);
-    border: 1px solid var(--neon-pink);
+    border: 1px solid rgba(255, 0, 85, 0.4);
     border-radius: 20px;
     padding: 30px;
     text-align: center;
     position: relative;
-    box-shadow: 0 0 25px rgba(255, 0, 85, 0.2);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.15);
 }
-.casino-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+
+.casino-desc { 
+    color: var(--text-muted); 
+    font-size: 0.9rem; 
+    margin-bottom: 20px; 
+}
+
 #gamble-btn {
     background: var(--neon-pink);
     color: white;
@@ -26,9 +238,15 @@
     transition: all 0.2s;
     box-shadow: 0 5px 15px rgba(255,0,85,0.4);
 }
-#gamble-btn:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--neon-pink); }
 
-/* Toast Achievements */
+#gamble-btn:hover { 
+    transform: scale(1.05); 
+    box-shadow: 0 0 25px var(--neon-pink); 
+}
+
+/* ==========================================
+   CHICCA 2: POP-UP DEGLI ACHIEVEMENT (TOAST)
+   ========================================== */
 .toast {
     position: fixed;
     bottom: 30px;
@@ -41,8 +259,101 @@
     z-index: 2000;
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
 }
-.toast.hidden { transform: translateY(150%) scale(0.8); opacity: 0; }
-.toast-content { display: flex; align-items: center; gap: 15px; }
-.toast-icon { font-size: 2rem; }
-.toast h4 { margin: 0; color: var(--neon-gold); font-size: 1rem; }
-.toast p { margin: 5px 0 0 0; color: #fff; font-size: 0.85rem; }
+
+.toast.hidden { 
+    transform: translateY(150%) scale(0.8); 
+    opacity: 0; 
+}
+
+.toast-content { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+.toast-icon { 
+    font-size: 2rem; 
+}
+
+.toast h4 { 
+    margin: 0; 
+    color: var(--neon-gold); 
+    font-size: 1rem; 
+}
+
+.toast p { 
+    margin: 5px 0 0 0; 
+    color: #fff; 
+    font-size: 0.85rem; 
+}
+
+/* ==========================================
+   CAVEAU / INVENTARIO DI VENDITA
+   ========================================== */
+.vault-section { 
+    max-width: 1200px; 
+    margin: 60px auto; 
+    padding: 0 20px; 
+}
+
+.vault-section h2 { 
+    font-size: 1.4rem; 
+    color: var(--text-muted); 
+    margin-bottom: 20px; 
+}
+
+.inventory-container {
+    background: rgba(255,255,255,0.01);
+    border: 1px dashed rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 25px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    min-height: 60px;
+}
+
+.inv-item {
+    background: #121522;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border-left: 3px solid var(--neon-cyan);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.inv-item:hover {
+    background: #1c0f1a;
+    border-left-color: var(--neon-pink);
+    transform: scale(1.05);
+}
+
+.inv-item::after {
+    content: " 💰 Vendi";
+    font-size: 0.75rem;
+    color: var(--neon-pink);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.inv-item:hover::after {
+    opacity: 1;
+}
+
+.empty-msg { 
+    color: var(--text-muted); 
+    text-align: center; 
+    width: 100%; 
+    margin: 15px 0;
+}
