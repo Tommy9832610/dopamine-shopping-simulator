@@ -6,7 +6,6 @@ let comboTimer;
 const inventory = {};
 const unlockedAchievements = new Set();
 
-// Database dei prezzi fluttuanti per TUTTI e 6 i prodotti
 const productsData = { 
     "Caffè Dorato": 50,
     "Supercar Elettrica": 250000, 
@@ -22,23 +21,21 @@ const rankLabel = document.getElementById('user-rank');
 const inventoryContainer = document.getElementById('inventory-list');
 const buttons = document.querySelectorAll('.buy-btn');
 
-// Sintetizzatore di Suoni Arcade Nativo
 function playCoinSound(isWin = true) {
     try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(isWin ? 587.33 : 220, ctx.currentTime); 
+        osc.type = isWin ? 'sine' : 'sawtooth';
+        osc.frequency.setValueAtTime(isWin ? 587.33 : 100, ctx.currentTime); 
         if(isWin) osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
         gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
         osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(); osc.stop(ctx.currentTime + 0.3);
-    } catch(e) { console.log("Audio non sbloccato"); }
+        osc.start(); osc.stop(ctx.currentTime + 0.4);
+    } catch(e) { console.log("Audio bloccato"); }
 }
 
-// Gestore obiettivi sbloccati
 function triggerAchievement(id, title, desc) {
     if (unlockedAchievements.has(id)) return;
     unlockedAchievements.add(id);
@@ -46,16 +43,70 @@ function triggerAchievement(id, title, desc) {
     document.getElementById('ach-desc').innerText = desc;
     const toast = document.getElementById('achievement-toast');
     toast.classList.remove('hidden');
-    confetti({ particleCount: 50, spread: 60, colors: ['#ffaa00'] });
     setTimeout(() => { toast.classList.add('hidden'); }, 4000);
 }
 
-// Algoritmo di Volatilità (Cambia i prezzi reali ogni 4 secondi)
+// 🍰 IL NUOVO DOLCE: Il Glitch Di Sistema e Reset Temporale
+function triggerSystemGlitch() {
+    // 1. Suono di errore grave distorto
+    playCoinSound(false);
+    
+    // 2. Crea l'effetto Matrix sullo schermo
+    const glitchOverlay = document.createElement('div');
+    glitchOverlay.style.position = 'fixed';
+    glitchOverlay.style.top = '0';
+    glitchOverlay.style.left = '0';
+    glitchOverlay.style.width = '100vw';
+    glitchOverlay.style.height = '100vh';
+    glitchOverlay.style.backgroundColor = '#000';
+    glitchOverlay.style.color = '#00ff66';
+    glitchOverlay.style.fontFamily = 'monospace';
+    glitchOverlay.style.padding = '20px';
+    glitchOverlay.style.zIndex = '9999';
+    glitchOverlay.style.overflow = 'hidden';
+    glitchOverlay.innerHTML = '<h2>⚠️ CRITICAL ERROR: CAPITALISM OVERFLOW ⚠️</h2>';
+    document.body.appendChild(glitchOverlay);
+
+    // 3. Genera righe di codice impazzite
+    let lines = 0;
+    const interval = setInterval(() => {
+        const p = document.createElement('p');
+        p.innerText = `ERR_BUDGET_UNDERFLOW: Ricalcolo realtà in corso... [${(Math.random() * 100000).toFixed(0)}] SYSTEM_RESET=TRUE`;
+        glitchOverlay.appendChild(p);
+        window.scrollTo(0, document.body.scrollHeight);
+        lines++;
+        
+        // Fai lampeggiare il counter del budget dietro le quinte
+        budgetCounter.innerText = "SYSTEM_FAILURE";
+        budgetCounter.style.color = "#ff0055";
+
+        if (lines > 30) {
+            clearInterval(interval);
+            // 4. Reset totale del gioco dopo 3 secondi di glitch
+            setTimeout(() => {
+                glitchOverlay.remove();
+                budget = 100000000000; // Ridai i 100 miliardi
+                totalSpent = 0;
+                budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
+                budgetCounter.style.color = "var(--neon-green)";
+                rankLabel.innerText = "Miliardario Base 🥉";
+                rankLabel.className = "rank-bronze";
+                inventoryContainer.innerHTML = '<p class="empty-msg">Il mercato si è resettato. Il tuo caveau è stato confiscato.</p>';
+                // Svuota inventario logico
+                for (let key in inventory) delete inventory[key];
+                confetti({ particleCount: 100, spread: 70 });
+            }, 1500);
+        }
+    }, 50);
+}
+
+// Volatilità Mercato
 setInterval(() => {
+    if (budget === "SYSTEM_FAILURE") return;
     document.querySelectorAll('.product-card').forEach(card => {
         const name = card.getAttribute('data-name');
         const basePrice = parseInt(card.getAttribute('data-base-price'));
-        const changePercent = (Math.random() * 24 - 12) / 100; // Fluttuazione ±12%
+        const changePercent = (Math.random() * 24 - 12) / 100;
         let currentPrice = Math.round(basePrice * (1 + changePercent));
         
         productsData[name] = currentPrice;
@@ -68,16 +119,16 @@ setInterval(() => {
     });
 }, 4000);
 
-// Progressione di Rank
 function checkRankProgression(spent) {
     if (spent >= 60000000000) { rankLabel.innerText = "Imperatore del Mondo 👑"; rankLabel.className = "rank-master"; }
     else if (spent >= 10000000000) { rankLabel.innerText = "Magnate Supremo 💎"; rankLabel.className = "rank-gold"; }
     else if (spent >= 50000000) { rankLabel.innerText = "Plutocrate d'Élite 🥈"; rankLabel.className = "rank-silver"; }
 }
 
-// Logica di Acquisto
+// Acquisti
 buttons.forEach(button => {
     button.addEventListener('click', (e) => {
+        if (budget === "SYSTEM_FAILURE") return;
         const card = e.target.parentElement;
         const name = card.getAttribute('data-name');
         const finalPrice = Math.round(productsData[name] / comboMultiplier);
@@ -87,24 +138,28 @@ buttons.forEach(button => {
             totalSpent += finalPrice;
             playCoinSound(true);
 
-            if(budget < 50000000000) triggerAchievement('half_gone', "Mezzo miliardario", "Hai speso la metà del tuo patrimonio iniziale.");
+            // Innesca il Glitch se finisci i soldi veri o compri l'oggetto finale!
+            if (budget < 100000000 || name === "Stazione Spaziale") {
+                triggerAchievement('matrix_break', "Rottura della Simulazione 🕶️", "Hai rotto l'economia mondiale.");
+                triggerSystemGlitch();
+                return;
+            }
 
             comboCount++;
             if (comboCount >= 5 && comboMultiplier === 1.0) {
                 comboMultiplier = 2.0;
                 comboCounter.innerText = "FRENESIA 2.0x 🔥";
-                triggerAchievement('frenzy', "Shopping Compulsivo", "Hai attivato il boost frenesia per prezzi dimezzati!");
+                clearTimeout(comboTimer);
+                comboTimer = setTimeout(() => { comboCount = 0; comboMultiplier = 1.0; comboCounter.innerText = "1.0x"; }, 3000);
+                confetti({ particleCount: 100, spread: 70 });
             }
-
-            clearTimeout(comboTimer);
-            comboTimer = setTimeout(() => { comboCount = 0; comboMultiplier = 1.0; comboCounter.innerText = "1.0x"; }, 3000);
 
             budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
             checkRankProgression(totalSpent);
             updateInventoryHTML(name);
-            confetti({ particleCount: 30, spread: 40 });
+            confetti({ particleCount: 20, spread: 30 });
         } else {
-            alert("❌ Transazione respinta: Fondi insufficienti per l'acquisto diretto!");
+            alert("❌ Fondi insufficienti!");
         }
     });
 });
@@ -121,8 +176,8 @@ function updateInventoryHTML(name) {
     }
 }
 
-// Logica di Vendita
 window.sellItem = function(name) {
+    if (budget === "SYSTEM_FAILURE") return;
     if (inventory[name] && inventory[name].count > 0) {
         budget += productsData[name];
         inventory[name].count--;
@@ -139,24 +194,25 @@ window.sellItem = function(name) {
     }
 };
 
-// Logica Casinò / Azzardo Criptato
 document.getElementById('gamble-btn').addEventListener('click', () => {
+    if (budget === "SYSTEM_FAILURE") return;
     const cost = 500000000;
     if (budget >= cost) {
         budget -= cost;
         budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
         
-        if (Math.random() > 0.6) { // 40% di Vittoria
+        if (Math.random() > 0.6) {
             playCoinSound(true);
             triggerAchievement('gambler_win', "Lupo del Web", "Hai vinto la scommessa ad alto rischio!");
             updateInventoryHTML("👑 NFT Scimmia di Diamante");
             confetti({ particleCount: 100, spread: 80, colors: ['#ffaa00', '#00f3ff'] });
         } else {
             playCoinSound(false);
-            alert("📉 Crollo di mercato! Il tuo investimento di 500 milioni è andato a zero!");
-            triggerAchievement('gambler_loss', "Bancarotta Emotiva", "Hai azzerato un capitale nel casinò clandestino.");
+            alert("📉 L'investimento è crollato a zero!");
+            triggerAchievement('gambler_loss', "Bancarotta Emotiva", "Hai azzerato un capitale nel casinò.");
         }
     } else {
-        alert("Fondi insufficienti per tentare la fortuna al casinò.");
+        alert("Fondi insufficienti!");
     }
-}); 
+});
+
