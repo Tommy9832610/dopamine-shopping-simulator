@@ -1,1 +1,48 @@
 
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dopamine Shopping Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Contatore del Budget Fisso in Alto -->
+    <div class="header-budget">
+        <h1>BUDGET: <span id="budget-counter">$100,000,000,000</span></h1>
+    </div>
+
+    <!-- Il Catalogo dei Beni -->
+    <main class="shop-container">
+        
+        <!-- Prodotto 1 -->
+        <div class="product-card" data-price="5">
+            <div class="product-emoji">☕</div>
+            <h3>Caffè Supremo</h3>
+            <p class="price">$5</p>
+            <button class="buy-btn">COMPRA</button>
+        </div>
+
+        <!-- Prodotto 2 -->
+        <div class="product-card" data-price="250000">
+            <div class="product-emoji">🏎️</div>
+            <h3>Supercar Neon</h3>
+            <p class="price">$250,000</p>
+            <button class="buy-btn">COMPRA</button>
+        </div>
+
+        <!-- Prodotto 3 -->
+        <div class="product-card" data-price="1500000000">
+            <div class="product-emoji">🚀</div>
+            <h3>Razzo Spaziale Privato</h3>
+            <p class="price">$1,500,000,000</p>
+            <button class="buy-btn">COMPRA</button>
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
