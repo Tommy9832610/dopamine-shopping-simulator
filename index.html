@@ -9,7 +9,6 @@
 </head>
 <body>
 
-    <!-- HUD Avanzato -->
     <header class="hud-header">
         <div class="stat-box">
             <span class="label">PORTAFOGLIO VIRTUALE</span>
@@ -25,15 +24,24 @@
         </div>
     </header>
 
-    <!-- Live Ticker -->
     <div class="ticker-wrap">
         <div class="ticker" id="fomo-ticker">
-            ⚡ BORSA: Il mercato è estremamente volatile oggi. Compra al ribasso, rivendi al massimo!
+            ⚡ BORSA: Volatilità estrema rilevata nei mercati globali. Compra al ribasso, specula al massimo!
         </div>
     </div>
 
-    <!-- Il Mercato Dinamico -->
     <main class="shop-container">
+        
+        <div class="product-card" data-base-price="50" data-name="Caffè Dorato">
+            <div class="badge">CONSUMABILE</div>
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=500&q=80" alt="Caffè">
+            </div>
+            <h3>Caffè in Foglia d'Oro</h3>
+            <p class="price">$50 <span class="trend">--</span></p>
+            <button class="buy-btn">ACQUISTA</button>
+        </div>
+
         <div class="product-card" data-base-price="250000" data-name="Supercar Elettrica">
             <div class="badge rare">RARO</div>
             <div class="img-container">
@@ -63,33 +71,51 @@
             <p class="price">$350,000,000 <span class="trend">--</span></p>
             <button class="buy-btn">ACQUISTA</button>
         </div>
-    </main>
 
-    <!-- CHICCA 1: Il Casinò Clandestino / Scatola a Sorpresa -->
+        <div class="product-card" data-base-price="1200000000" data-name="Attico Manhattan">
+            <div class="badge legendary">LEGGENDARIO</div>
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=500&q=80" alt="Grattacielo">
+            </div>
+            <h3>Attico Luxury a Manhattan</h3>
+            <p class="price">$1,200,000,000 <span class="trend">--</span></p>
+            <button class="buy-btn">ACQUISTA</button>
+        </div>
+
+        <div class="product-card" data-base-price="15000000000" data-name="Stazione Spaziale">
+            <div class="badge legendary">RELAZIONE ALTA</div>
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=500&q=80" alt="Spazio">
+            </div>
+            <h3>Stazione Spaziale Privata</h3>
+            <p class="price">$15,000,000,000 <span class="trend">--</span></p>
+            <button class="buy-btn">ACQUISTA</button>
+        </div>
+
+     </main>
+
     <section class="casino-section">
         <div class="casino-card">
             <span class="badge" style="color: var(--neon-gold)">RISCHIO ALTO</span>
             <h3>🎲 Investimento Anonimo Criptato</h3>
-            <p>Costo: <b style="color: var(--neon-pink)">$500,000,000</b></p>
-            <p class="casino-desc">Puoi sbloccare un NFT leggendario dal valore inestimabile o perdere l'intero capitale investito.</p>
+            <p>Costo della Puntata: <b style="color: var(--neon-pink)">$500,000,000</b></p>
+            <p class="casino-desc">Rischia mezzo miliardo: puoi sbloccare un NFT leggendario dal valore inestimabile o perdere tutto.</p>
             <button id="gamble-btn">TENTA LA FORTUNA</button>
         </div>
     </section>
 
-    <!-- Notifiche di Obiettivi Sbloccati -->
     <div id="achievement-toast" class="toast hidden">
         <div class="toast-content">
             <span class="toast-icon">🏆</span>
             <div>
                 <h4 id="ach-title">Obiettivo Sbloccato!</h4>
-                <p id="ach-desc">Descrizione dell'obiettivo.</p>
+                <p id="ach-desc">Descrizione dell'obiettivo raggiunto.</p>
             </div>
         </div>
     </div>
 
-    <!-- Caveau -->
     <section class="vault-section">
-        <h2>🔒 Caveau di Massima Sicurezza (Clicca su un bene per RIVENDERLO)</h2>
+        <h2>🔒 Caveau di Massima Sicurezza (Clicca su un bene per RIVENDERLO al prezzo attuale)</h2>
         <div id="inventory-list" class="inventory-container">
             <p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>
         </div>
