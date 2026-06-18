@@ -159,4 +159,4 @@ document.getElementById('gamble-btn').addEventListener('click', () => {
     } else {
         alert("Fondi insufficienti per tentare la fortuna al casinò.");
     }
-});
+}); 
