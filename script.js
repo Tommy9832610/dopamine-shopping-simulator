@@ -46,7 +46,7 @@ function triggerAchievement(id, title, desc) {
     setTimeout(() => { toast.classList.add('hidden'); }, 4000);
 }
 
-// 🍰 IL DOLCE VERO: Schermata celebrativa con torta gigante ed emoji
+// Schermata celebrativa con torta gigante ed emoji
 function triggerDessertCelebration(spentAll = false) {
     playCoinSound(true);
 
@@ -96,7 +96,7 @@ function triggerDessertCelebration(spentAll = false) {
     });
 }
 
-// 🍰 INTERRUTTORE DEL TASTO-TORTA GIGANTE
+// Logica del Tasto-Torta Fotografico
 document.getElementById('mega-cake-btn').addEventListener('click', () => {
     if (budget > 0) {
         totalSpent += budget;
@@ -132,7 +132,7 @@ const fomoPhrases = [
     "🍭 NEWS: Gli investitori stanno correndo ad acquistare l'Attico a Manhattan prima che finisca la glassa!",
     "🧁 AVVISO: Il Rank 'Re della Pasticceria' richiede una spesa folle. Mangia tutto il budget!",
     "🍩 CRIPTO: Un utente ha scambiato un Donut d'Oro per un intero Jet Privato.",
-    "✨ FRENESIA: Clicca 5 vezes rapidamente per scatenare l'overdose di sconti!"
+    "✨ FRENESIA: Clicca 5 volte rapidamente per scatenare l'overdose di sconti!"
 ];
 
 setInterval(() => {
@@ -229,3 +229,4 @@ document.getElementById('gamble-btn').addEventListener('click', () => {
         alert("Fondi insufficienti!");
     }
 });
+
