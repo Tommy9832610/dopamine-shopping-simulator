@@ -1,31 +1,26 @@
-/* ==========================================
-   PALETTE DOLCE E ZUCCHEROSA (CANDY SKIN)
-   ========================================== */
 :root {
-    --bg-color: #fff0f5; /* Rosa lavanda chiarissimo / Panna al lampone */
+    --bg-color: #fff0f5; 
     --card-bg: #ffffff;
-    --candy-pink: #ff69b4; /* Rosa confetto acceso */
-    --candy-blue: #70d6ff; /* Azzurro zucchero filato */
-    --candy-gold: #ffb703; /* Giallo caramello / Crema */
-    --candy-purple: #e0aaff; /* Lilla marshmallow */
-    --mint-green: #06d6a0; /* Verde menta per i guadagni */
-    --text-main: #4a2840; /* Marrone cioccolato fondente per i testi */
+    --candy-pink: #ff69b4; 
+    --candy-blue: #70d6ff; 
+    --candy-gold: #ffb703; 
+    --candy-purple: #e0aaff; 
+    --mint-green: #06d6a0; 
+    --text-main: #4a2840; 
     --text-muted: #a3889e;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
-    font-family: 'Quicksand', 'Inter', system-ui, sans-serif; /* Font più morbido e tondo */
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     margin: 0;
     padding-top: 160px;
     padding-bottom: 50px;
     overflow-x: hidden;
 }
 
-/* ==========================================
-   HUD SUPERIORE (SEMBRA FATTO DI PANNA E GLASSA)
-   ========================================== */
+/* HUD SUPERIORE */
 .hud-header {
     position: fixed;
     top: 0;
@@ -53,188 +48,109 @@ body {
     font-size: 2.2rem;
     color: var(--candy-pink);
     font-weight: 900;
-    text-shadow: 1px 1px 0px #fff, 2px 2px 0px rgba(255, 105, 180, 0.2);
 }
 
-.stat-box h2 { 
-    margin: 5px 0 0 0; 
-    font-size: 1.5rem;
-    color: var(--text-main);
-}
+.stat-box h2 { margin: 5px 0 0 0; font-size: 1.5rem; color: var(--text-main); }
 
-/* Ranks in versione Pasticceria */
 .rank-bronze { color: #b5838d; }
 .rank-silver { color: #9a8c98; text-shadow: 0 0 5px #fff; }
 .rank-gold { color: var(--candy-gold); }
 .rank-master { color: var(--candy-pink); text-shadow: 0 0 10px rgba(255,105,180,0.4); }
 
-/* ==========================================
-   TICKER NEWS CAKE
-   ========================================== */
-.ticker-wrap { 
-    width: 100%; 
-    background: var(--candy-purple); 
-    overflow: hidden; 
-    padding: 8px 0; 
-    border-bottom: 2px solid rgba(0,0,0,0.05);
-}
-
-.ticker { 
-    white-space: nowrap; 
-    animation: marquee 25s linear infinite; 
-    color: #fff; 
-    font-size: 0.85rem; 
-    font-weight: bold;
-}
-
-@keyframes marquee { 
-    0% { transform: translate3d(100%, 0, 0); } 
-    100% { transform: translate3d(-100%, 0, 0); } 
-}
+/* TICKER */
+.ticker-wrap { width: 100%; background: var(--candy-purple); overflow: hidden; padding: 8px 0; border-bottom: 2px solid rgba(0,0,0,0.05); }
+.ticker { white-space: nowrap; animation: marquee 25s linear infinite; color: #fff; font-size: 0.85rem; font-weight: bold; }
+@keyframes marquee { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
 /* ==========================================
-   VETRINA DEI PRODOTTI (MORBIDA E ROTONDA)
+   IL BOTTONE TORTA VISIVO E 3D
    ========================================== */
-.shop-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
+.cake-button-wrapper {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, #fff5f8 0%, #ffffff 70%);
+    border: 4px dashed var(--candy-pink);
+    border-radius: 30px;
+    padding: 35px;
+    cursor: pointer;
+    box-shadow: 0 15px 40px rgba(255, 105, 180, 0.15);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+    margin-bottom: 20px;
 }
 
-.product-card {
-    background: var(--card-bg);
-    border: 3px solid transparent;
-    border-radius: 24px; /* Angoli molto arrotondati */
-    padding: 18px;
+.cake-button-wrapper:hover {
+    transform: scale(1.03);
+    box-shadow: 0 20px 50px rgba(255, 105, 180, 0.3);
+}
+
+.cake-3d {
+    width: 140px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
     position: relative;
-    box-shadow: 0 10px 25px rgba(74, 40, 64, 0.05);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s, border-color 0.3s;
+    margin-bottom: 15px;
 }
 
-.product-card:hover {
-    transform: scale(1.04) rotate(1deg); /* Leggera rotazione giocosa */
-    border-color: var(--candy-blue);
-    box-shadow: 0 15px 35px rgba(112, 214, 255, 0.3);
-}
+.cake-layer { border-radius: 12px 12px 4px 4px; box-shadow: inset 0 -5px 0 rgba(0,0,0,0.1); }
+.layer-bottom { width: 130px; height: 35px; background: #ff85a2; border-bottom: 4px solid #e63946; }
+.layer-middle { width: 100px; height: 30px; background: #4a2840; margin-bottom: -2px; }
+.layer-top { width: 70px; height: 25px; background: #ffffff; border: 2px solid #ff69b4; margin-bottom: -2px; }
 
-.img-container { 
-    width: 100%; 
-    height: 180px; 
-    border-radius: 18px; 
-    overflow: hidden; 
-    margin-bottom: 15px; 
-}
+.candle { width: 8px; height: 25px; background: linear-gradient(to right, #70d6ff, #fff); position: absolute; top: 10px; border-radius: 2px; }
+.flame { width: 12px; height: 18px; background: var(--candy-gold); border-radius: 50% 50% 20% 20%; position: absolute; top: -20px; left: -2px; animation: flicker 0.6s ease-in-out infinite alternate; box-shadow: 0 0 10px var(--candy-gold); }
+
+@keyframes flicker { 0% { transform: scale(1) rotate(-2deg); opacity: 0.9; } 100% { transform: scale(1.2) rotate(2deg); opacity: 1; } }
+.cake-label { text-align: center; }
+.cake-label h3 { margin: 0; font-size: 1.5rem; font-weight: 900; color: var(--candy-pink); }
+.cake-label p { margin: 5px 0 0 0; font-size: 1rem; font-weight: 800; color: var(--candy-gold); }
+
+/* VETRINA PRODOTTI */
+.shop-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.product-card { background: var(--card-bg); border: 3px solid transparent; border-radius: 24px; padding: 18px; position: relative; box-shadow: 0 10px 25px rgba(74, 40, 64, 0.05); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.product-card:hover { transform: scale(1.03) rotate(0.5deg); border-color: var(--candy-blue); box-shadow: 0 15px 35px rgba(112, 214, 255, 0.25); }
+
+.img-container { width: 100%; height: 180px; border-radius: 18px; overflow: hidden; margin-bottom: 15px; }
 .img-container img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Badge Zuccherosi */
-.badge {
-    position: absolute;
-    top: 25px;
-    left: 25px;
-    z-index: 10;
-    font-size: 0.7rem;
-    font-weight: 800;
-    padding: 6px 12px;
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+.badge { position: absolute; top: 25px; left: 25px; z-index: 10; font-size: 0.7rem; font-weight: 800; padding: 6px 12px; border-radius: 12px; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: #fff;}
 .badge.rare { color: var(--candy-blue); border: 2px solid var(--candy-blue); }
 .badge.epic { color: #b026ff; border: 2px solid #b026ff; }
 .badge.legendary { color: var(--candy-pink); border: 2px solid var(--candy-pink); }
 
-.product-card h3 { 
-    font-size: 1.2rem; 
-    margin: 10px 5px; 
-    font-weight: 700;
-    color: var(--text-main);
-}
-
-.price { 
-    font-size: 1.35rem; 
-    color: var(--candy-gold); 
-    font-weight: 800; 
-    margin: 5px 5px 15px 5px; 
-}
+.product-card h3 { font-size: 1.2rem; margin: 10px 5px; font-weight: 700; color: var(--text-main); }
+.price { font-size: 1.35rem; color: var(--candy-gold); font-weight: 800; margin: 5px 5px 15px 5px; }
 .trend { font-size: 0.85rem; margin-left: 5px; }
 .trend.up { color: var(--mint-green); }
 .trend.down { color: var(--candy-pink); }
 
-/* Bottone Confetto */
-.buy-btn {
-    background: linear-gradient(135deg, var(--candy-blue), #5ab9ea);
-    color: white;
-    border: none;
-    border-radius: 16px;
-    font-weight: 700;
-    padding: 15px;
-    width: 100%;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(112, 214, 255, 0.4);
-    transition: all 0.2s ease;
-}
-
-.product-card:hover .buy-btn {
-    background: linear-gradient(135deg, var(--candy-pink), #ff85a2);
-    box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
-}
-
+.buy-btn { background: linear-gradient(135deg, var(--candy-blue), #5ab9ea); color: white; border: none; border-radius: 16px; font-weight: 700; padding: 15px; width: 100%; cursor: pointer; box-shadow: 0 4px 15px rgba(112, 214, 255, 0.3); transition: all 0.2s ease; }
+.product-card:hover .buy-btn { background: linear-gradient(135deg, var(--candy-pink), #ff85a2); box-shadow: 0 6px 20px rgba(255, 105, 180, 0.3); }
 .buy-btn:active { transform: scale(0.95); }
 
-/* ==========================================
-   IL GRANDE TASTO DELLA TORTA SUPREMA
-   ========================================== */
-.premium-cake-card {
-    border: 3px dashed var(--candy-pink) !important;
-    background: #fff5f7 !important;
-}
-
-.cake-btn {
-    background: linear-gradient(45deg, var(--candy-pink), var(--candy-gold)) !important;
-    box-shadow: 0 5px 20px rgba(255, 105, 180, 0.5) !important;
-}
-
-/* ==========================================
-   CASINÒ CANDY
-   ========================================== */
+/* CASINÒ CANDY */
 .casino-section { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
-.casino-card { 
-    background: #ffffff; 
-    border: 3px solid var(--candy-purple); 
-    border-radius: 24px; 
-    padding: 30px; 
-    text-align: center; 
-    box-shadow: 0 10px 30px rgba(224, 170, 255, 0.3);
-}
+.casino-card { background: #ffffff; border: 3px solid var(--candy-purple); border-radius: 24px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(224, 170, 255, 0.2); }
 .casino-desc { color: var(--text-muted); }
-#gamble-btn { 
-    background: var(--candy-purple); 
-    color: white; 
-    border: none; 
-    border-radius: 16px; 
-    font-weight: bold; 
-    padding: 15px 40px; 
-    cursor: pointer; 
-    box-shadow: 0 5px 15px rgba(224,170,255,0.4);
-}
+#gamble-btn { background: var(--candy-purple); color: white; border: none; border-radius: 16px; font-weight: bold; padding: 15px 40px; cursor: pointer; box-shadow: 0 5px 15px rgba(224,170,255,0.3); }
 
-/* ==========================================
-   TOAST ACHIEVEMENT SBLOCCATI
-   ========================================== */
-.toast { position: fixed; bottom: 30px; right: 30px; background: #fff; border: 3px solid var(--candy-gold); border-radius: 20px; padding: 15px 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 2000; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s; }
+/* TOAST TO PASTEL */
+.toast { position: fixed; bottom: 30px; right: 30px; background: #fff; border: 3px solid var(--candy-gold); border-radius: 20px; padding: 15px 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 2000; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s; }
 .toast.hidden { transform: translateY(150%) scale(0.8); opacity: 0; }
 .toast h4 { margin: 0; color: var(--candy-gold); }
 .toast p { margin: 5px 0 0 0; color: var(--text-main); }
 
-/* ==========================================
-   IL CAVEAU (DIVENTA UNA SCATOLA DI PASTICCIINI)
-   ========================================== */
+/* CAVEAU */
 .vault-section { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
 .vault-section h2 { font-size: 1.4rem; color: var(--text-main); }
 .inventory-container { background: #fff; border: 3px dashed var(--text-muted); border-radius: 24px; padding: 25px; display: flex; gap: 15px; flex-wrap: wrap; }
-.inv-item { background: var(--bg-color); color: var(--text-main); padding: 12px 20px; border-radius: 14px; border-left: 4px solid var(--candy-blue); font-weight: bold; cursor: pointer; }
+.inv-item { background: var(--bg-color); color: var(--text-main); padding: 12px 20px; border-radius: 14px; border-left: 4px solid var(--candy-blue); font-weight: bold; cursor: pointer; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 .inv-item:hover { background: #ffe3ec; border-left-color: var(--candy-pink); }
+.inv-item::after { content: " 💰 Vendi"; font-size: 0.75rem; color: var(--candy-pink); margin-left: 10px; }
 .empty-msg { color: var(--text-muted); text-align: center; width: 100%; }
