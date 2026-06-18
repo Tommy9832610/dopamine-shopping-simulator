@@ -3,44 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dopamine Shopping Simulator</title>
+    <title>Dopamine Luxury Market</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Contatore del Budget Fisso in Alto -->
-    <div class="header-budget">
-        <h1>BUDGET: <span id="budget-counter">$100,000,000,000</span></h1>
+    <header class="hud-header">
+        <div class="stat-box">
+            <span class="label">BILANCIO DISPONIBILE</span>
+            <h1 id="budget-counter">$100,000,000,000</h1>
+        </div>
+        <div class="stat-box">
+            <span class="label">OGGETTI POSSEDUTI</span>
+            <h2 id="items-owned">0</h2>
+        </div>
+    </header>
+
+    <div class="ticker-wrap">
+        <div class="ticker" id="fomo-ticker">
+            🔥 Qualcuno ha appena acquistato una "Flotta di Yacht" | ⚠️ I prezzi del petrolio finto sono in aumento!
+        </div>
     </div>
 
-    <!-- Il Catalogo dei Beni -->
     <main class="shop-container">
         
-        <!-- Prodotto 1 -->
-        <div class="product-card" data-price="5">
+        <div class="product-card" data-id="1" data-price="15" data-name="Caffè Dorato">
+            <div class="badge">TRENDING</div>
             <div class="product-emoji">☕</div>
-            <h3>Caffè Supremo</h3>
-            <p class="price">$5</p>
-            <button class="buy-btn">COMPRA</button>
+            <h3>Caffè in Foglia d'Oro</h3>
+            <p class="price">$15</p>
+            <button class="buy-btn">ACQUISTA ORA</button>
         </div>
 
-        <!-- Prodotto 2 -->
-        <div class="product-card" data-price="250000">
+        <div class="product-card" data-id="2" data-price="350000" data-name="Cybercar">
+            <div class="badge rare">RARO</div>
             <div class="product-emoji">🏎️</div>
-            <h3>Supercar Neon</h3>
-            <p class="price">$250,000</p>
-            <button class="buy-btn">COMPRA</button>
+            <h3>Cybercar Hyperion</h3>
+            <p class="price">$350,000</p>
+            <button class="buy-btn">ACQUISTA ORA</button>
         </div>
 
-        <!-- Prodotto 3 -->
-        <div class="product-card" data-price="1500000000">
-            <div class="product-emoji">🚀</div>
-            <h3>Razzo Spaziale Privato</h3>
-            <p class="price">$1,500,000,000</p>
-            <button class="buy-btn">COMPRA</button>
+        <div class="product-card" data-id="3" data-price="250000000" data-name="Isola">
+            <div class="badge legendary">LEGGENDARIO</div>
+            <div class="product-emoji">🏝️</div>
+            <h3>Isola Privata Criptata</h3>
+            <p class="price">$250,000,000</p>
+            <button class="buy-btn">ACQUISTA ORA</button>
+        </div>
+
+        <div class="product-card" data-id="4" data-price="5000000000" data-name="Squadra Calcio">
+            <div class="badge legendary">LEGGENDARIO</div>
+            <div class="product-emoji">⚽</div>
+            <h3>Club di Calcio in Premier</h3>
+            <p class="price">$5,000,000,000</p>
+            <button class="buy-btn">ACQUISTA ORA</button>
         </div>
 
     </main>
+
+    <section class="vault-section">
+        <h2>🔒 Il tuo Caveau Privato (Inventario)</h2>
+        <div id="inventory-list" class="inventory-container">
+            <p class="empty-msg">Il tuo caveau è vuoto. Inizia a spendere.</p>
+        </div>
+    </section>
 
     <script src="script.js"></script>
 </body>
