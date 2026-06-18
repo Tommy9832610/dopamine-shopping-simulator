@@ -9,6 +9,7 @@
 </head>
 <body>
 
+    <!-- HUD Superiore -->
     <header class="hud-header">
         <div class="stat-box">
             <span class="label">PORTAFOGLIO VIRTUALE</span>
@@ -20,18 +21,37 @@
         </div>
         <div class="stat-box">
             <span class="label">COMBO SCONTO</span>
-            <h2 id="combo-multiplier" style="color: var(--neon-pink)">1.0x</h2>
+            <h2 id="combo-multiplier" style="color: var(--candy-pink)">1.0x</h2>
         </div>
     </header>
 
+    <!-- Ticker News Live -->
     <div class="ticker-wrap">
         <div class="ticker" id="fomo-ticker">
-            ⚡ BORSA: Volatilità estrema rilevata nei mercati globali. Compra al ribasso, specula al massimo!
+            🍭 NEWS: Gli investitori stanno correndo ad acquistare l'Attico a Manhattan prima che finisca la glassa!
         </div>
     </div>
 
+    <!-- Il Mercato Esteso -->
     <main class="shop-container">
         
+        <!-- 🍰 IL TASTO-TORTA VISIVO GIGANTE (Costa tutto il patrimonio!) -->
+        <div class="cake-button-wrapper" id="mega-cake-btn">
+            <div class="cake-3d">
+                <div class="cake-layer layer-top"></div>
+                <div class="cake-layer layer-middle"></div>
+                <div class="cake-layer layer-bottom"></div>
+                <div class="candle">
+                    <div class="flame"></div>
+                </div>
+            </div>
+            <div class="cake-label">
+                <h3>IL DOLCE SUPREMO</h3>
+                <p>PREZZO: TUTTI I TUOI SOLDI ISTANTANEAMENTE</p>
+            </div>
+        </div>
+
+        <!-- 1. Caffè Dorato -->
         <div class="product-card" data-base-price="50" data-name="Caffè Dorato">
             <div class="badge">CONSUMABILE</div>
             <div class="img-container">
@@ -42,6 +62,7 @@
             <button class="buy-btn">ACQUISTA</button>
         </div>
 
+        <!-- 2. Supercar -->
         <div class="product-card" data-base-price="250000" data-name="Supercar Elettrica">
             <div class="badge rare">RARO</div>
             <div class="img-container">
@@ -52,6 +73,7 @@
             <button class="buy-btn">ACQUISTA</button>
         </div>
 
+        <!-- 3. Jet Privato -->
         <div class="product-card" data-base-price="45000000" data-name="Jet Privato">
             <div class="badge epic">EPICO</div>
             <div class="img-container">
@@ -62,6 +84,7 @@
             <button class="buy-btn">ACQUISTA</button>
         </div>
 
+        <!-- 4. Mega Yacht -->
         <div class="product-card" data-base-price="350000000" data-name="Mega Yacht">
             <div class="badge legendary">LEGGENDARIO</div>
             <div class="img-container">
@@ -72,6 +95,7 @@
             <button class="buy-btn">ACQUISTA</button>
         </div>
 
+        <!-- 5. Attico Manhattan -->
         <div class="product-card" data-base-price="1200000000" data-name="Attico Manhattan">
             <div class="badge legendary">LEGGENDARIO</div>
             <div class="img-container">
@@ -82,6 +106,7 @@
             <button class="buy-btn">ACQUISTA</button>
         </div>
 
+        <!-- 6. Stazione Spaziale -->
         <div class="product-card" data-base-price="15000000000" data-name="Stazione Spaziale">
             <div class="badge legendary">RELAZIONE ALTA</div>
             <div class="img-container">
@@ -94,16 +119,18 @@
 
      </main>
 
+    <!-- Sezione Casinò -->
     <section class="casino-section">
         <div class="casino-card">
-            <span class="badge" style="color: var(--neon-gold)">RISCHIO ALTO</span>
+            <span class="badge" style="color: var(--candy-gold)">RISCHIO ALTO</span>
             <h3>🎲 Investimento Anonimo Criptato</h3>
-            <p>Costo della Puntata: <b style="color: var(--neon-pink)">$500,000,000</b></p>
+            <p>Costo della Puntata: <b style="color: var(--candy-pink)">$500,000,000</b></p>
             <p class="casino-desc">Rischia mezzo miliardo: puoi sbloccare un NFT leggendario dal valore inestimabile o perdere tutto.</p>
             <button id="gamble-btn">TENTA LA FORTUNA</button>
         </div>
     </section>
 
+    <!-- Notifiche Pop-up Achievement -->
     <div id="achievement-toast" class="toast hidden">
         <div class="toast-content">
             <span class="toast-icon">🏆</span>
@@ -114,8 +141,9 @@
         </div>
     </div>
 
+    <!-- Il Caveau -->
     <section class="vault-section">
-        <h2>🔒 Caveau di Massima Sicurezza (Clicca su un bene per RIVENDERLO al prezzo attuale)</h2>
+        <h2>🔒 Scatola dei Pasticcini (Clicca su un bene per RIVENDERLO al prezzo attuale)</h2>
         <div id="inventory-list" class="inventory-container">
             <p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>
         </div>
