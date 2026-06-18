@@ -1,62 +1,78 @@
 let budget = 100000000000; 
+let totalSpent = 0;
 let itemsOwnedCount = 0;
 const inventory = {};
 
 const budgetCounter = document.getElementById('budget-counter');
 const itemsCounter = document.getElementById('items-owned');
+const rankLabel = document.getElementById('user-rank');
 const inventoryContainer = document.getElementById('inventory-list');
 const buttons = document.querySelectorAll('.buy-btn');
 
-// Frasi FOMO casuali per alterare lo stato emotivo
 const fomoPhrases = [
-    "🔥 Elon Musk ha appena venduto le sue azioni per comprare un Caffè Dorato.",
-    "⚠️ Scorte di 'Isola Privata' in esaurimento nel server asiatico!",
-    "💸 Un utente anonimo ha speso $15.000.000.000 negli ultimi 30 secondi.",
-    "🚀 Il valore di status del tuo Vault è aumentato del 12%."
+    "🚨 MERCATO: Gli investitori della Silicon Valley stanno esaurendo le scorte di Jet Privati.",
+    "📈 AVVISO: Il Rank 'Imperatore del Mondo' richiede una spesa totale superiore a 50 Miliardi.",
+    "💎 CRIPTO: Un acquirente anonimo ha appena scambiato arte digitale per un intero Grattacielo.",
+    "🔥 OBSOLESCENZA: Le Hypercar stanno subendo un picco di richieste."
 ];
 
 setInterval(() => {
     const ticker = document.getElementById('fomo-ticker');
     ticker.innerText = fomoPhrases[Math.floor(Math.random() * fomoPhrases.length)];
-}, 6000);
+}, 5000);
+
+// Sistema articolato di progressione Rank
+function checkRankProgression(spent) {
+    if (spent >= 50000000000) {
+        rankLabel.innerText = "Imperatore del Mondo 👑";
+        rankLabel.className = "rank-master";
+    } else if (spent >= 5000000000) {
+        rankLabel.innerText = "Magnate Supremo 💎";
+        rankLabel.className = "rank-gold";
+    } else if (spent >= 50000000) {
+        rankLabel.innerText = "Plutocrate d'Élite 🥈";
+        rankLabel.className = "rank-silver";
+    }
+}
 
 buttons.forEach(button => {
     button.addEventListener('click', (e) => {
         const card = e.target.parentElement;
         const price = parseInt(card.getAttribute('data-price'));
         const name = card.getAttribute('data-name');
-        const emoji = card.querySelector('.product-emoji').innerText;
 
         if (budget >= price) {
             budget -= price;
+            totalSpent += price;
             itemsOwnedCount++;
             
-            // Aggiorna HUD con animazione di impatto
+            // Aggiorna HUD e innesca animazione pulsante
             budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
             itemsCounter.innerText = itemsOwnedCount;
             
-            budgetCounter.style.transform = "scale(1.15) rotate(-1deg)";
-            setTimeout(() => { budgetCounter.style.transform = "scale(1) rotate(0deg)"; }, 100);
+            checkRankProgression(totalSpent);
 
-            // Gestione Logica Inventario
+            budgetCounter.style.transform = "scale(1.1)";
+            setTimeout(() => { budgetCounter.style.transform = "scale(1)"; }, 100);
+
+            // Logica Inventario di Lusso
             if (inventory[name]) {
                 inventory[name].count++;
                 document.getElementById(`inv-${name}`).querySelector('.qty').innerText = `x${inventory[name].count}`;
             } else {
-                inventory[name] = { count: 1, emoji: emoji };
-                // Rimuove messaggio "vuoto" se è il primo oggetto
+                inventory[name] = { count: 1 };
                 if(itemsOwnedCount === 1) inventoryContainer.innerHTML = ''; 
                 
-                const itemHtml = `<div class="inv-item" id="inv-${name}"><span>${emoji}</span> ${name} <b class="qty" style="color:#00f3ff">x1</b></div>`;
+                const itemHtml = `<div class="inv-item" id="inv-${name}">${name} <b class="qty" style="color:var(--neon-gold)">x1</b></div>`;
                 inventoryContainer.insertAdjacentHTML('beforeend', itemHtml);
             }
 
-            // Splendida doppia esplosione di coriandoli
-            confetti({ particleCount: 80, spread: 60, origin: { x: 0.2, y: 0.8 } });
-            confetti({ particleCount: 80, spread: 60, origin: { x: 0.8, y: 0.8 } });
+            // Esplosione Coriandoli Premium Multi-direzionale
+            confetti({ particleCount: 100, spread: 70, origin: { x: 0.1, y: 0.8 } });
+            confetti({ particleCount: 100, spread: 70, origin: { x: 0.9, y: 0.8 } });
 
         } else {
-            alert("❌ Fondi insufficienti nel tuo conto d'alta finanza!");
+            alert("❌ Transazione respinta. La tua banca ha bloccato i fondi insufficienti!");
         }
     });
 });
