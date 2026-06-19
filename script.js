@@ -43,7 +43,7 @@ if (themeToggleBtn) {
             localStorage.setItem('luxury_theme', 'light');
             themeToggleBtn.innerText = "🍫 Modalità Notte";
         }
-        playCustomSound('fluid'); // Suono moderno al clic del tema
+        playCustomSound('fluid'); 
     });
 }
 
@@ -83,43 +83,25 @@ function updateBudgetDisplay(targetValue, animate = true) {
     requestAnimationFrame(step);
 }
 
-// 5. MOTORE AUDIO PROFESSIONALE CON CAMPIONAMENTI CINEMATICI REALI
+// 5. MOTORE AUDIO PROVVISORIO (Attivato solo per il primo file click.mp3)
 function playCustomSound(type) {
     try {
-        let soundUrl = "";
+        let soundFile = "";
 
+        // Usiamo temporaneamente click.mp3 per qualsiasi acquisto per vedere se carica l'audio correttamente
         if (type === 'fluid') {
-            // Click pulito / Vetro cristallino / Tazzina
-            soundUrl = "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav"; 
-        } 
-        else if (type === 'engine') {
-            // Accorciata sportiva / Ruggito motore reale
-            soundUrl = "https://assets.mixkit.co/active_storage/sfx/2761/2761-84.wav"; 
-        } 
-        else if (type === 'space') {
-            // Transizione fantascientifica profonda / Spaziale cinematica
-            soundUrl = "https://assets.mixkit.co/active_storage/sfx/902/902-84.wav"; 
-        }
-        else if (type === 'dopamine') {
-            // Arpeggio magico / Cascata scintillante di successo
-            soundUrl = "https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav"; 
-        }
-        else if (type === 'casino') {
-            // Tintinnio di monete e fiches ad alta definizione
-            soundUrl = "https://assets.mixkit.co/active_storage/sfx/2017/2017-84.wav"; 
-        }
-        else if (type === 'loss') {
-            // Boom di sub-bassi cupo e calante per il fallimento
-            soundUrl = "https://assets.mixkit.co/active_storage/sfx/2573/2573-84.wav"; 
+            soundFile = "click.mp3"; 
+        } else {
+            soundFile = "click.mp3"; 
         }
 
-        if (soundUrl !== "") {
-            const audio = new Audio(soundUrl);
-            audio.volume = 0.35; // Volume ottimizzato
-            audio.play().catch(e => console.log("Audio in attesa del primo clic utente sulla pagina."));
+        if (soundFile !== "") {
+            const audio = new Audio(soundFile);
+            audio.volume = 0.4; 
+            audio.play().catch(e => console.log("Clicca prima sullo sfondo per sbloccare l'audio!"));
         }
     } catch(e) { 
-        console.log("Errore riproduzione audio audio:", e); 
+        console.log("Errore nel caricamento del file audio:", e); 
     }
 }
 
@@ -160,187 +142,4 @@ function triggerDessertCelebration(spentAll = false) {
         <h1 style="color: var(--candy-pink); font-size: 2.5rem; text-align:center; font-weight:900; margin-top:20px;">
             OVERDOSE DI PURA DOPAMINA! 🧠✨
         </h1>
-        <p style="color: var(--text-main); text-align:center; max-width:80%; margin-top:10px; line-height:1.5; font-weight: bold;">
-            ${subtext}
-        </p>
-        <button id="close-cake-btn" style="margin-top: 30px; background: var(--candy-blue); color: #fff; border: none; padding: 15px 40px; font-weight: bold; border-radius: 16px; cursor: pointer; font-size:1.1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">RICOMINCIA LA SCALATA SOCIALE</button>
-    `;
-    document.body.appendChild(cakeOverlay);
-
-    if(typeof confetti === 'function') {
-        const end = Date.now() + (5 * 1000);
-        (function frame() {
-            confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff69b4', '#ffb703', '#70d6ff'] });
-            confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff69b4', '#ffb703', '#70d6ff'] });
-            if (Date.now() < end) { requestAnimationFrame(frame); }
-        }());
-    }
-
-    document.getElementById('close-cake-btn').addEventListener('click', () => {
-        cakeOverlay.remove();
-        budget = 100000000000; 
-        totalSpent = 0;
-        updateBudgetDisplay(budget, true);
-        if(rankLabelEl) {
-            rankLabelEl.innerText = "Miliardario Base 🥉";
-            rankLabelEl.className = "rank-bronze";
-        }
-        for (let member in inventory) delete inventory[member];
-        saveGameState(); renderInventory();
-    });
-}
-
-const megaCakeBtn = document.getElementById('mega-cake-btn');
-if(megaCakeBtn) {
-    megaCakeBtn.addEventListener('click', () => {
-        if (budget > 0) {
-            totalSpent += budget; budget = 0; 
-            updateBudgetDisplay(budget, true);
-            triggerAchievement('all_in_cake', "Iniezione di Felicità ⚡", "Hai scambiato 100 miliardi per una scarica pura di neurotrasmettitori.");
-            updateInventoryHTML("👑 Pura Dopamina");
-            setTimeout(() => { triggerDessertCelebration(true); }, 500);
-        }
-    });
-}
-
-// 6. VOLATILITÀ DI BORSA AUTOMATICA
-setInterval(() => {
-    document.querySelectorAll('.product-card').forEach(card => {
-        const name = card.getAttribute('data-name');
-        if(!name) return;
-        const basePrice = parseInt(card.getAttribute('data-base-price'));
-        const changePercent = (Math.random() * 24 - 12) / 100;
-        let currentPrice = Math.round(basePrice * (1 + changePercent));
-        
-        productsData[name] = currentPrice;
-        let displayPrice = Math.round(currentPrice / currentComboMultiplier);
-
-        const trendSpan = card.querySelector('.trend');
-        const priceEl = card.querySelector('.price');
-        if(priceEl) priceEl.childNodes[0].nodeValue = "$" + displayPrice.toLocaleString('en-US') + " ";
-        
-        card.classList.remove('flash-up', 'flash-down');
-        void card.offsetWidth; 
-
-        if (trendSpan) {
-            if (changePercent >= 0) { 
-                trendSpan.innerText = `▲ +${Math.round(changePercent*100)}%`; trendSpan.className = "trend up"; 
-                card.classList.add('flash-up');
-            } else { 
-                trendSpan.innerText = `▼ ${Math.round(changePercent*100)}%`; trendSpan.className = "trend down"; 
-                card.classList.add('flash-down');
-            }
-        }
-    });
-}, 4000);
-
-const fomoPhrases = [
-    "🍭 NEWS: Gli investitori stanno correndo ad acquistare l'Attico a Manhattan prima che finisca la glassa!",
-    "🧁 AVVISO: Il Rank 'Re della Pasticceria' richiede una spesa folle. Mangia tutto il budget!",
-    "🍩 CRIPTO: Un utente ha scambiato un Donut d'Oro per un intero Jet Privato.",
-    "✨ FRENESIA: Clicca 5 volte rapidamente per scatenare l'overdose di sconti!"
-];
-setInterval(() => {
-    const tickerEl = document.getElementById('fomo-ticker');
-    if(tickerEl) tickerEl.innerText = fomoPhrases[Math.floor(Math.random() * fomoPhrases.length)];
-}, 5000);
-
-function checkRankProgression(spent) {
-    if(!rankLabelEl) return;
-    if (spent >= 60000000000) { rankLabelEl.innerText = "Re della Pasticceria 👑🍰"; rankLabelEl.className = "rank-master"; }
-    else if (spent >= 10000000000) { rankLabelEl.innerText = "Magnate della Glassa 🍩"; rankLabelEl.className = "rank-gold"; }
-    else if (spent >= 50000000) { rankLabelEl.innerText = "Pasticciere d'Élite 🧁"; rankLabelEl.className = "rank-silver"; }
-}
-
-// 7. LOGICA DI ACQUISTO COMPONENTI
-buyButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const card = e.target.parentElement;
-        const name = card.getAttribute('data-name');
-        const sType = card.getAttribute('data-sound') || 'fluid';
-        const finalPrice = Math.round(productsData[name] / currentComboMultiplier);
-
-        if (budget >= finalPrice) {
-            budget -= finalPrice; totalSpent += finalPrice;
-            playCustomSound(sType); 
-
-            if (budget < 100000000 && budget > 0) {
-                triggerAchievement('sweet_victory', "Pasticceria d'Élite 2", "Hai consumato tutto il capitale.");
-                triggerDessertCelebration(false);
-            }
-
-            currentComboCount++;
-            if (currentComboCount >= 5 && currentComboMultiplier === 1.0) {
-                currentComboMultiplier = 2.0;
-                if(comboMultiplierEl) comboMultiplierEl.innerText = "FRENESIA 2.0x 🔥";
-                clearTimeout(comboTimer);
-                comboTimer = setTimeout(() => { currentComboCount = 0; currentComboMultiplier = 1.0; if(comboMultiplierEl) comboMultiplierEl.innerText = "1.0x"; }, 3000);
-                if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 70 });
-            }
-
-            updateBudgetDisplay(budget, true);
-            checkRankProgression(totalSpent);
-            updateInventoryHTML(name);
-            if(typeof confetti === 'function') confetti({ particleCount: 20, spread: 30 });
-        } else { alert("❌ Borsa Chiusa: Fondi insufficienti!"); }
-    });
-});
-
-function updateInventoryHTML(name) {
-    if (inventory[name]) { inventory[name].count++; } else { inventory[name] = { count: 1 }; }
-    saveGameState(); renderInventory();
-}
-
-function renderInventory() {
-    if(!inventoryContainerEl) return;
-    const keys = Object.keys(inventory).filter(k => inventory[k].count > 0);
-    if (keys.length === 0) {
-        inventoryContainerEl.innerHTML = '<p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>';
-        return;
-    }
-    inventoryContainerEl.innerHTML = '';
-    keys.forEach(name => {
-        const div = document.createElement('div');
-        div.className = 'inv-item';
-        div.innerHTML = `${name} <b class="qty" style="color:var(--candy-gold)">x${inventory[name].count}</b>`;
-        div.addEventListener('click', () => { sellItem(name); });
-        inventoryContainerEl.appendChild(div);
-    });
-}
-
-function sellItem(name) {
-    if (inventory[name] && inventory[name].count > 0) {
-        const refundValue = productsData[name] || 0;
-        budget += refundValue; inventory[name].count--;
-        if (inventory[name].count === 0) { delete inventory[name]; }
-        
-        playCustomSound('fluid');
-        updateBudgetDisplay(budget, true);
-        saveGameState(); renderInventory();
-    }
-}
-
-// 8. LOGICA SLOT MACHINE CASINÒ
-const gambleBtn = document.getElementById('gamble-btn');
-if(gambleBtn) {
-    gambleBtn.addEventListener('click', () => {
-        const cost = 500000000;
-        if (budget >= cost) {
-            budget -= cost; updateBudgetDisplay(budget, true);
-            playCustomSound('casino'); 
-            
-            setTimeout(() => {
-                if (Math.random() > 0.6) {
-                    triggerAchievement('gambler_win', "Lupo della Finanza", "Hai vinto la scommessa!");
-                    updateInventoryHTML("👑 NFT Donut Dorato");
-                    if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 80, colors: ['#ffb703', '#70d6ff'] });
-                } else {
-                    playCustomSound('loss'); 
-                    alert("📉 Crollo della panna! Investimento azzerato.");
-                    triggerAchievement('gambler_loss', "Bancarotta", "Niente caramelle per stavolta.");
-                    saveGameState();
-                }
-            }, 300);
-        } else { alert("Fondi insufficienti!"); }
-    });
-}
+        <p style="color: var(--text-main); text-align:center; max-width:80%; margin-top:10px; line-height:1.5; font-
