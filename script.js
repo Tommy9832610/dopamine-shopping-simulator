@@ -1,21 +1,17 @@
-let budget = 100000000000; 
-let totalSpent = 0;
+// Caricamento dei dati persistenti da localStorage o valori iniziali di default
+let budget = parseInt(localStorage.getItem('luxury_budget')) || 100000000000;
+let totalSpent = parseInt(localStorage.getItem('luxury_spent')) || 0;
+const inventory = JSON.parse(localStorage.getItem('luxury_inventory')) || {};
+const unlockedAchievements = new Set(JSON.parse(localStorage.getItem('luxury_achievements')) || []);
+
 let comboCount = 0;
 let comboMultiplier = 1.0;
 let comboTimer;
-const inventory = {};
-const unlockedAchievements = new Set();
 
-// Aggiornata la chiave qui con il nuovo nome
 const productsData = { 
-    "Caffè Dorato": 50,
-    "Supercar Elettrica": 250000, 
-    "Jet Privato": 45000000, 
-    "Mega Yacht": 350000000,
-    "Attico Manhattan": 1200000000,
-    "Stazione Spaziale": 15000000000,
-    "👑 Pura Dopamina": 0,
-    "👑 NFT Donut Dorato": 500000000
+    "Caffè Dorato": 50, "Supercar Elettrica": 250000, "Jet Privato": 45000000, 
+    "Mega Yacht": 350000000, "Attico Manhattan": 1200000000, "Stazione Spaziale": 15000000000,
+    "👑 Pura Dopamina": 0, "👑 NFT Donut Dorato": 500000000
 };
 
 const budgetCounter = document.getElementById('budget-counter');
@@ -23,6 +19,53 @@ const comboCounter = document.getElementById('combo-multiplier');
 const rankLabel = document.getElementById('user-rank');
 const inventoryContainer = document.getElementById('inventory-list');
 const buttons = document.querySelectorAll('.buy-btn');
+
+// Inizializza l'interfaccia con i dati salvati
+updateBudgetDisplay(budget, false);
+checkRankProgression(totalSpent);
+renderInventory();
+
+// Salva lo stato nel browser
+function saveGameState() {
+    localStorage.setItem('luxury_budget', budget);
+    localStorage.setItem('luxury_spent', totalSpent);
+    localStorage.setItem('luxury_inventory', JSON.stringify(inventory));
+    localStorage.setItem('luxury_achievements', JSON.stringify([...unlockedAchievements]));
+}
+
+// Spettacolare effetto contatore a scorrimento rapido stile Slot Machine
+function updateBudgetDisplay(targetValue, animate = true) {
+    if (!animate) {
+        budgetCounter.innerText = "$" + targetValue.toLocaleString('en-US');
+        return;
+    }
+    
+    let currentValue = parseInt(budgetCounter.innerText.replace(/[^0-9]/g, '')) || 0;
+    if (currentValue === targetValue) return;
+
+    // Cambia temporaneamente colore durante il movimento dei soldi
+    budgetCounter.style.color = (targetValue > currentValue) ? "var(--mint-green)" : "var(--candy-pink)";
+
+    const duration = 400; 
+    const startTime = performance.now();
+
+    function step(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        // Calcolo fluido di interpolazione
+        const easeProgress = progress * (2 - progress); 
+        const nextValue = Math.round(currentValue + (targetValue - currentValue) * easeProgress);
+        
+        budgetCounter.innerText = "$" + nextValue.toLocaleString('en-US');
+
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        } else {
+            budgetCounter.innerText = "$" + targetValue.toLocaleString('en-US');
+            budgetCounter.style.color = "var(--candy-pink)"; // Torna al colore base
+        }
+    }
+    requestAnimationFrame(step);
+}
 
 function playCoinSound(isWin = true) {
     try {
@@ -36,12 +79,14 @@ function playCoinSound(isWin = true) {
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
         osc.connect(gain); gain.connect(ctx.destination);
         osc.start(); osc.stop(ctx.currentTime + 0.3);
-    } catch(e) { console.log("Audio non sbloccato"); }
+    } catch(e) { console.log("Audio in attesa di interazione"); }
 }
 
 function triggerAchievement(id, title, desc) {
     if (unlockedAchievements.has(id)) return;
     unlockedAchievements.add(id);
+    saveGameState();
+    
     document.getElementById('ach-title').innerText = title;
     document.getElementById('ach-desc').innerText = desc;
     const toast = document.getElementById('achievement-toast');
@@ -66,13 +111,13 @@ function triggerDessertCelebration(spentAll = false) {
     cakeOverlay.style.zIndex = '9999';
     
     let subtext = spentAll 
-        ? "Hai sacrificato TUTTO il tuo patrimonio per un'overdose di Pura Dopamina! L'economia ringrazia."
-        : "Hai consumato fino all'ultimo centesimo dei 100 Miliardi! Ti sei meritato questa festa virtuale!";
+        ? "Hai sacrificato TUTTO il tuo patrimonio per un'overdose di Pura Dopamina! L'economia mondiale è al collasso, ma il tuo cervello sta esplodendo di felicità."
+        : "Hai consumato fino all'ultimo centesimo dei 100 Miliardi! Il tuo livello di gratificazione ha raggiunto il massimo storico.";
 
     cakeOverlay.innerHTML = `
-        <div style="font-size: 8rem; animation: bounce 1s infinite alternate;">🎂</div>
+        <div style="font-size: 8rem; animation: bounce 1s infinite alternate;">⚡</div>
         <h1 style="color: #ff69b4; font-size: 2.5rem; text-align:center; font-weight:900; margin-top:20px;">
-            OVERDOSE DI DOPAMINA! 🍰
+            OVERDOSE DI PURA DOPAMINA! 🧠✨
         </h1>
         <p style="color: #4a2840; font-size: 1.2rem; text-align:center; max-width:80%; margin-top:10px; line-height:1.5; font-weight: bold;">
             ${subtext}
@@ -92,26 +137,29 @@ function triggerDessertCelebration(spentAll = false) {
         cakeOverlay.remove();
         budget = 100000000000; 
         totalSpent = 0;
-        budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
+        updateBudgetDisplay(budget, true);
         rankLabel.innerText = "Miliardario Base 🥉";
         rankLabel.className = "rank-bronze";
         
         for (let member in inventory) delete inventory[member];
-        inventoryContainer.innerHTML = '<p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>';
+        saveGameState();
+        renderInventory();
     });
 }
 
+// Cliccando sul tastone, azzera tutto
 document.getElementById('mega-cake-btn').addEventListener('click', () => {
     if (budget > 0) {
         totalSpent += budget;
         budget = 0; 
-        budgetCounter.innerText = "$0";
-        triggerAchievement('all_in_cake', "Iniezione di Felicità 🎂", "Hai scambiato 100 miliardi per Pura Dopamina.");
+        updateBudgetDisplay(budget, true);
+        triggerAchievement('all_in_cake', "Iniezione di Felicità ⚡", "Hai scambiato 100 miliardi per una scarica pura di neurotrasmettitori.");
         updateInventoryHTML("👑 Pura Dopamina");
-        setTimeout(() => { triggerDessertCelebration(true); }, 300);
+        setTimeout(() => { triggerDessertCelebration(true); }, 500);
     }
 });
 
+// Motore Volatilità con iniezione di bagliori (Flash CSS) sulle Card
 setInterval(() => {
     document.querySelectorAll('.product-card').forEach(card => {
         const name = card.getAttribute('data-name');
@@ -125,8 +173,18 @@ setInterval(() => {
 
         const trendSpan = card.querySelector('.trend');
         card.querySelector('.price').childNodes[0].nodeValue = "$" + displayPrice.toLocaleString('en-US') + " ";
-        if (changePercent >= 0) { trendSpan.innerText = `▲ +${Math.round(changePercent*100)}%`; trendSpan.className = "trend up"; } 
-        else { trendSpan.innerText = `▼ ${Math.round(changePercent*100)}%`; trendSpan.className = "trend down"; }
+        
+        // Rimuove vecchie classi di flash per poterle reinnescare
+        card.classList.remove('flash-up', 'flash-down');
+        void card.offsetWidth; // Trucco per forzare il riavvio dell'animazione nel browser
+
+        if (changePercent >= 0) { 
+            trendSpan.innerText = `▲ +${Math.round(changePercent*100)}%`; trendSpan.className = "trend up"; 
+            card.classList.add('flash-up');
+        } else { 
+            trendSpan.innerText = `▼ ${Math.round(changePercent*100)}%`; trendSpan.className = "trend down"; 
+            card.classList.add('flash-down');
+        }
     });
 }, 4000);
 
@@ -147,6 +205,7 @@ function checkRankProgression(spent) {
     else if (spent >= 50000000) { rankLabel.innerText = "Pasticciere d'Élite 🧁"; rankLabel.className = "rank-silver"; }
 }
 
+// Logica Acquisti
 buttons.forEach(button => {
     button.addEventListener('click', (e) => {
         const card = e.target.parentElement;
@@ -172,7 +231,7 @@ buttons.forEach(button => {
                 confetti({ particleCount: 100, spread: 70 });
             }
 
-            budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
+            updateBudgetDisplay(budget, true);
             checkRankProgression(totalSpent);
             updateInventoryHTML(name);
             confetti({ particleCount: 20, spread: 30 });
@@ -183,16 +242,13 @@ buttons.forEach(button => {
 });
 
 function updateInventoryHTML(name) {
-    if (inventory[name]) {
-        inventory[name].count++;
-    } else {
-        inventory[name] = { count: 1 };
-    }
+    if (inventory[name]) { inventory[name].count++; } else { inventory[name] = { count: 1 }; }
+    saveGameState();
     renderInventory();
 }
 
 function renderInventory() {
-    const keys = Object.keys(inventory);
+    const keys = Object.keys(inventory).filter(k => inventory[k].count > 0);
     if (keys.length === 0) {
         inventoryContainer.innerHTML = '<p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>';
         return;
@@ -200,7 +256,6 @@ function renderInventory() {
 
     inventoryContainer.innerHTML = '';
     keys.forEach(name => {
-        if (inventory[name].count <= 0) return;
         const div = document.createElement('div');
         div.className = 'inv-item';
         div.innerHTML = `${name} <b class="qty" style="color:var(--candy-gold)">x${inventory[name].count}</b>`;
@@ -214,23 +269,22 @@ function sellItem(name) {
         const refundValue = productsData[name] || 0;
         budget += refundValue;
         inventory[name].count--;
-        playCoinSound(true);
 
-        if (inventory[name].count === 0) {
-            delete inventory[name];
-        }
-        budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
+        if (inventory[name].count === 0) { delete inventory[name]; }
+        
+        playCoinSound(true);
+        updateBudgetDisplay(budget, true);
+        saveGameState();
         renderInventory();
     }
 }
-
-window.sellItem = sellItem;
 
 document.getElementById('gamble-btn').addEventListener('click', () => {
     const cost = 500000000;
     if (budget >= cost) {
         budget -= cost;
-        budgetCounter.innerText = "$" + budget.toLocaleString('en-US');
+        updateBudgetDisplay(budget, true);
+        
         if (Math.random() > 0.6) {
             playCoinSound(true);
             triggerAchievement('gambler_win', "Lupo della Finanza", "Hai vinto la scommessa!");
@@ -240,6 +294,7 @@ document.getElementById('gamble-btn').addEventListener('click', () => {
             playCoinSound(false);
             alert("📉 Crollo della panna! Investimento azzerato.");
             triggerAchievement('gambler_loss', "Bancarotta", "Niente caramelle per stavolta.");
+            saveGameState();
         }
     } else {
         alert("Fondi insufficienti!");
