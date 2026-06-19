@@ -27,20 +27,34 @@ updateBudgetDisplay(budget, false);
 checkRankProgression(totalSpent);
 renderInventory();
 
-// 🔊 INIZIALIZZAZIONE AUDIO GLOBALE (Previene i blocchi del browser)
-// Usiamo un suono CDN pubblico standard e leggero per il test del click
-const globalClickAudio = new Audio("https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/button_tiny.mp3");
-globalClickAudio.volume = 0.5;
-globalClickAudio.preload = "auto";
-
-// Sblocca l'audio al primo tocco sullo schermo (Indispensabile per iOS/Android)
-document.addEventListener('click', () => {
-    globalClickAudio.play().then(() => {
-        // Suono riprodotto con successo, audio sbloccato!
-        globalClickAudio.pause();
-        globalClickAudio.currentTime = 0;
-    }).catch(e => console.log("In attesa di interazione reale"));
-}, { once: true });
+// 🔊 PROVA GENERATORE AUDIO INTERNO (Senza file, genera onde acustiche pure)
+function playCustomSound(type) {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) {
+            alert("Il tuo browser non supporta l'AudioContext!");
+            return;
+        }
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(580, ctx.currentTime);
+        
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
+    } catch(e) { 
+        // Se si blocca, ti mostra l'errore esatto sullo schermo
+        alert("Errore Audio: " + e.message); 
+    }
+}
 
 // 3. LOGICA DI ATTIVAZIONE DELLA MODALITÀ NOTTE (CIOCCOLATO FONDENTE)
 if (localStorage.getItem('luxury_theme') === 'dark') {
@@ -96,19 +110,6 @@ function updateBudgetDisplay(targetValue, animate = true) {
         }
     }
     requestAnimationFrame(step);
-}
-
-// 5. RIPRODUTTORE AUDIO OTTIMIZZATO
-function playCustomSound(type) {
-    try {
-        // Riproduciamo il file audio globale pre-caricato
-        globalClickAudio.currentTime = 0;
-        globalClickAudio.play().catch(e => {
-            console.log("Riproduzione intercettata o bloccata:", e);
-        });
-    } catch(e) { 
-        console.log("Errore riproduzione:", e); 
-    }
 }
 
 function triggerAchievement(id, title, desc) {
@@ -245,4 +246,89 @@ buyButtons.forEach(button => {
     button.addEventListener('click', (e) => {
         const card = e.target.parentElement;
         const name = card.getAttribute('data-name');
-        const finalPrice = Math.round(productsData[name] /
+        const finalPrice = Math.round(productsData[name] / currentComboMultiplier);
+
+        if (budget >= finalPrice) {
+            budget -= finalPrice; totalSpent += finalPrice;
+            playCustomSound('fluid'); 
+
+            if (budget < 100000000 && budget > 0) {
+                triggerAchievement('sweet_victory', "Pasticceria d'Élite 2", "Hai consumato tutto il capitale.");
+                triggerDessertCelebration(false);
+            }
+
+            currentComboCount++;
+            if (currentComboCount >= 5 && currentComboMultiplier === 1.0) {
+                currentComboMultiplier = 2.0;
+                if(comboMultiplierEl) comboMultiplierEl.innerText = "FRENESIA 2.0x 🔥";
+                clearTimeout(comboTimer);
+                comboTimer = setTimeout(() => { currentComboCount = 0; currentComboMultiplier = 1.0; if(comboMultiplierEl) comboMultiplierEl.innerText = "1.0x"; }, 3000);
+                if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 70 });
+            }
+
+            updateBudgetDisplay(budget, true);
+            checkRankProgression(totalSpent);
+            updateInventoryHTML(name);
+            if(typeof confetti === 'function') confetti({ particleCount: 20, spread: 30 });
+        } else { alert("❌ Borsa Chiusa: Fondi insufficienti!"); }
+    });
+});
+
+function updateInventoryHTML(name) {
+    if (inventory[name]) { inventory[name].count++; } else { inventory[name] = { count: 1 }; }
+    saveGameState(); renderInventory();
+}
+
+function renderInventory() {
+    if(!inventoryContainerEl) return;
+    const keys = Object.keys(inventory).filter(k => inventory[k].count > 0);
+    if (keys.length === 0) {
+        inventoryContainerEl.innerHTML = '<p class="empty-msg">Nessun bene di lusso registrato a tuo nome nel database.</p>';
+        return;
+    }
+    inventoryContainerEl.innerHTML = '';
+    keys.forEach(name => {
+        const div = document.createElement('div');
+        div.className = 'inv-item';
+        div.innerHTML = `${name} <b class="qty" style="color:var(--candy-gold)">x${inventory[name].count}</b>`;
+        div.addEventListener('click', () => { sellItem(name); });
+        inventoryContainerEl.appendChild(div);
+    });
+}
+
+function sellItem(name) {
+    if (inventory[name] && inventory[name].count > 0) {
+        const refundValue = productsData[name] || 0;
+        budget += refundValue; inventory[name].count--;
+        if (inventory[name].count === 0) { delete inventory[name]; }
+        
+        playCustomSound('fluid');
+        updateBudgetDisplay(budget, true);
+        saveGameState(); renderInventory();
+    }
+}
+
+// 8. LOGICA SLOT MACHINE CASINÒ
+const gambleBtn = document.getElementById('gamble-btn');
+if(gambleBtn) {
+    gambleBtn.addEventListener('click', () => {
+        const cost = 500000000;
+        if (budget >= cost) {
+            budget -= cost; updateBudgetDisplay(budget, true);
+            playCustomSound('casino'); 
+            
+            setTimeout(() => {
+                if (Math.random() > 0.6) {
+                    triggerAchievement('gambler_win', "Lupo della Finanza", "Hai vinto la scommessa!");
+                    updateInventoryHTML("👑 NFT Donut Dorato");
+                    if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 80, colors: ['#ffb703', '#70d6ff'] });
+                } else {
+                    playCustomSound('fluid'); 
+                    alert("📉 Crollo della panna! Investimento azzerato.");
+                    triggerAchievement('gambler_loss', "Bancarotta", "Niente caramelle per stavolta.");
+                    saveGameState();
+                }
+            }, 300);
+        } else { alert("Fondi insufficienti!"); }
+    });
+}
